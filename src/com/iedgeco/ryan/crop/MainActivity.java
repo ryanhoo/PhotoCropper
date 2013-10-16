@@ -38,6 +38,10 @@ public class MainActivity extends Activity {
 		intent.putExtra("outputX", outputX);
 		intent.putExtra("outputY", outputY);
 		intent.putExtra("scale", true);
+		// android4.3 nexus7 测试，相机拍摄后使用Uri方式存储并裁剪
+		// 若设置了MediaStore.EXTRA_OUTPUT这个参数，裁剪后的图片为0kb
+		// onActivityResult中得到的resultCode为0。
+		//去掉下面这句之后就能正常裁剪了
 		intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
 		intent.putExtra("return-data", false);
 		intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
