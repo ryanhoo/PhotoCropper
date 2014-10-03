@@ -13,6 +13,7 @@ import android.net.Uri;
  * - 11:00 2014/10/03 Encapsulate the crop params.
  * - 13:20 2014/10/03 Put the initialization into constructor method.
  * - 14:00 2014/10/03 Make the crop as String instead of Boolean.
+ * - 14:30 2014/10/03 Increase the default output size from 200 to 300.
  */
 public class CropParams {
 
@@ -20,7 +21,7 @@ public class CropParams {
     public static final String OUTPUT_FORMAT = Bitmap.CompressFormat.JPEG.toString();
 
     public static final int DEFAULT_ASPECT = 1;
-    public static final int DEFAULT_OUTPUT = 200;
+    public static final int DEFAULT_OUTPUT = 300;
 
     public Uri uri;
 
