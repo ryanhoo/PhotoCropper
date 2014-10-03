@@ -10,7 +10,7 @@ import android.net.Uri;
  * Time: 11:12 AM
  * Desc: CropParams
  * Revision:
- *  - 11:00 2014/10/03 Encapsulate the crop params.
+ * - 11:00 2014/10/03 Encapsulate the crop params.
  */
 public class CropParams {
 
@@ -20,7 +20,7 @@ public class CropParams {
     public static final int DEFAULT_ASPECT = 1;
     public static final int DEFAULT_OUTPUT = 200;
 
-    public Uri uri = CropHelper.buildURI();
+    public Uri uri = CropHelper.buildUri();
 
     public String type = CROP_TYPE;
     public String outputFormat = OUTPUT_FORMAT;
