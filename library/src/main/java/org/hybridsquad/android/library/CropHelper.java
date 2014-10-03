@@ -1,13 +1,17 @@
 package org.hybridsquad.android.library;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 
 /**
  * Created with Android Studio.
@@ -18,6 +22,7 @@ import java.io.File;
  * Revision:
  * - 10:00 2014/10/03 Basic utils.
  * - 11:30 2014/10/03 Add static methods for generating crop intents.
+ * - 15:00 2014/10/03 Finish the logic of handling crop intents.
  */
 public class CropHelper {
 
@@ -29,7 +34,6 @@ public class CropHelper {
      */
     public static final int REQUEST_CROP = 127;
     public static final int REQUEST_CAMERA = 128;
-    public static final int REQUEST_GALLERY = 129;
 
     public static final String CROP_CACHE_FILE_NAME = "crop_cache_file.jpg";
 
@@ -47,22 +51,32 @@ public class CropHelper {
         if (resultCode == Activity.RESULT_CANCELED) {
             handler.onCropCancel();
         } else if (resultCode == Activity.RESULT_OK) {
+            CropParams cropParams = handler.getCropParams();
+            if (cropParams == null) {
+                handler.onCropFailed("CropHandler's params MUST NOT be null!");
+                return;
+            }
             switch (requestCode) {
                 case REQUEST_CROP:
                     Log.d(TAG, "Photo cropped!");
-                    handler.onPhotoCropped(buildUri());
+                    handler.onPhotoCropped(handler.getCropParams().uri);
                     break;
                 case REQUEST_CAMERA:
-
-                    break;
-                case REQUEST_GALLERY:
-
+                    Intent intent = buildCropFromUriIntent(handler.getCropParams());
+                    Activity context = handler.getContext();
+                    if (context != null) {
+                        context.startActivityForResult(intent, REQUEST_CROP);
+                    } else {
+                        handler.onCropFailed("CropHandler's context MUST NOT be null!");
+                    }
                     break;
             }
         }
     }
 
     public static boolean clearCachedCropFile(Uri uri) {
+        if (uri == null) return false;
+
         File file = new File(uri.getPath());
         if (file.exists()) {
             boolean result = file.delete();
@@ -86,26 +100,36 @@ public class CropHelper {
     }
 
     public static Intent buildCaptureIntent(Uri uri) {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-        intent.putExtra("crop-custom-data", "ryan hoo");
-        return intent;
+        return new Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        .putExtra(MediaStore.EXTRA_OUTPUT, uri);
     }
 
     public static Intent buildCropIntent(String action, CropParams params) {
-        Intent intent = new Intent(action, null);
-        intent.setType(params.type);
-        intent.putExtra("crop", params.crop);
-        intent.putExtra("scale", params.scale);
-        intent.putExtra("aspectX", params.aspectX);
-        intent.putExtra("aspectY", params.aspectY);
-        intent.putExtra("outputX", params.outputX);
-        intent.putExtra("outputY", params.outputY);
-        intent.putExtra("return-data", params.returnData);
-        intent.putExtra("outputFormat", params.outputFormat);
-        intent.putExtra("noFaceDetection", params.noFaceDetection);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, params.uri);
-        return intent;
+        return new Intent(action, null)
+                .setDataAndType(params.uri, params.type)
+                        //.setType(params.type)
+                .putExtra("crop", params.crop)
+                .putExtra("scale", params.scale)
+                .putExtra("aspectX", params.aspectX)
+                .putExtra("aspectY", params.aspectY)
+                .putExtra("outputX", params.outputX)
+                .putExtra("outputY", params.outputY)
+                .putExtra("return-data", params.returnData)
+                .putExtra("outputFormat", params.outputFormat)
+                .putExtra("noFaceDetection", params.noFaceDetection)
+                .putExtra(MediaStore.EXTRA_OUTPUT, params.uri);
     }
 
+    public static Bitmap decodeUriAsBitmap(Context context, Uri uri) {
+        if (context == null || uri == null) return null;
+
+        Bitmap bitmap;
+        try {
+            bitmap = BitmapFactory.decodeStream(context.getContentResolver().openInputStream(uri));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return bitmap;
+    }
 }
