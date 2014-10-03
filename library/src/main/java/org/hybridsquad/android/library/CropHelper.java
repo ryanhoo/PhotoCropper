@@ -2,9 +2,9 @@ package org.hybridsquad.android.library;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 
 import java.io.File;
@@ -32,8 +32,6 @@ public class CropHelper {
     public static final int REQUEST_GALLERY = 129;
 
     public static final String CROP_CACHE_FILE_NAME = "crop_cache_file.jpg";
-    public static final String CROP_FILE_FORMAT = Bitmap.CompressFormat.JPEG.toString();
-
 
     public static Uri buildUri() {
         return Uri
@@ -77,6 +75,37 @@ public class CropHelper {
             Log.w(TAG, "Trying to clear cached crop file but it does not exist.");
         }
         return false;
+    }
+
+    public static Intent buildCropFromUriIntent(CropParams params) {
+        return buildCropIntent("com.android.camera.action.CROP", params);
+    }
+
+    public static Intent buildCropFromGalleryIntent(CropParams params) {
+        return buildCropIntent(Intent.ACTION_GET_CONTENT, params);
+    }
+
+    public static Intent buildCaptureIntent(Uri uri) {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+        intent.putExtra("crop-custom-data", "ryan hoo");
+        return intent;
+    }
+
+    public static Intent buildCropIntent(String action, CropParams params) {
+        Intent intent = new Intent(action, null);
+        intent.setType(params.type);
+        intent.putExtra("crop", params.crop);
+        intent.putExtra("scale", params.scale);
+        intent.putExtra("aspectX", params.aspectX);
+        intent.putExtra("aspectY", params.aspectY);
+        intent.putExtra("outputX", params.outputX);
+        intent.putExtra("outputY", params.outputY);
+        intent.putExtra("return-data", params.returnData);
+        intent.putExtra("outputFormat", params.outputFormat);
+        intent.putExtra("noFaceDetection", params.noFaceDetection);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, params.uri);
+        return intent;
     }
 
 }
