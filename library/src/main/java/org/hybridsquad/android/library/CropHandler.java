@@ -1,5 +1,6 @@
 package org.hybridsquad.android.library;
 
+import android.app.Activity;
 import android.net.Uri;
 
 /**
@@ -10,6 +11,7 @@ import android.net.Uri;
  * Desc: CropHandler
  * Revision:
  * - 10:20 2014/10/01 The basic interfaces.
+ * - 13:00 2014/10/03 Able to get access to the CropParams the related Context.
  */
 public interface CropHandler {
 
@@ -18,4 +20,8 @@ public interface CropHandler {
     void onCropCancel();
 
     void onCropFailed(String message);
+
+    CropParams getCropParams();
+
+    Activity getContext();
 }
