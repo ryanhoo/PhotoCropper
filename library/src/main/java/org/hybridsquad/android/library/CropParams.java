@@ -12,6 +12,7 @@ import android.net.Uri;
  * Revision:
  * - 11:00 2014/10/03 Encapsulate the crop params.
  * - 13:20 2014/10/03 Put the initialization into constructor method.
+ * - 14:00 2014/10/03 Make the crop as String instead of Boolean.
  */
 public class CropParams {
 
@@ -25,8 +26,8 @@ public class CropParams {
 
     public String type;
     public String outputFormat;
+    public String crop;
 
-    public boolean crop;
     public boolean scale;
     public boolean returnData;
     public boolean noFaceDetection;
@@ -41,7 +42,7 @@ public class CropParams {
         uri = CropHelper.buildUri();
         type = CROP_TYPE;
         outputFormat = OUTPUT_FORMAT;
-        crop = true;
+        crop = "true";
         scale = true;
         returnData = false;
         noFaceDetection = true;
