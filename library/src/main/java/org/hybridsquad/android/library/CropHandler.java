@@ -8,6 +8,8 @@ import android.net.Uri;
  * Date: 10/1/14
  * Time: 11:00 AM
  * Desc: CropHandler
+ * Revision:
+ * - 10:20 2014/10/01 The basic interfaces.
  */
 public interface CropHandler {
 
@@ -15,5 +17,5 @@ public interface CropHandler {
 
     void onCropCancel();
 
-    void onCropFailed();
+    void onCropFailed(String message);
 }
