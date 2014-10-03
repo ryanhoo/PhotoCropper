@@ -11,6 +11,7 @@ import android.net.Uri;
  * Desc: CropParams
  * Revision:
  * - 11:00 2014/10/03 Encapsulate the crop params.
+ * - 13:20 2014/10/03 Put the initialization into constructor method.
  */
 public class CropParams {
 
@@ -20,19 +21,33 @@ public class CropParams {
     public static final int DEFAULT_ASPECT = 1;
     public static final int DEFAULT_OUTPUT = 200;
 
-    public Uri uri = CropHelper.buildUri();
+    public Uri uri;
 
-    public String type = CROP_TYPE;
-    public String outputFormat = OUTPUT_FORMAT;
+    public String type;
+    public String outputFormat;
 
-    public boolean crop = true;
-    public boolean scale = true;
-    public boolean returnData = false;
-    public boolean noFaceDetection = true;
+    public boolean crop;
+    public boolean scale;
+    public boolean returnData;
+    public boolean noFaceDetection;
 
-    public int aspectX = DEFAULT_ASPECT;
-    public int aspectY = DEFAULT_ASPECT;
+    public int aspectX;
+    public int aspectY;
 
-    public int outputX = DEFAULT_OUTPUT;
-    public int outputY = DEFAULT_OUTPUT;
+    public int outputX;
+    public int outputY;
+
+    public CropParams() {
+        uri = CropHelper.buildUri();
+        type = CROP_TYPE;
+        outputFormat = OUTPUT_FORMAT;
+        crop = true;
+        scale = true;
+        returnData = false;
+        noFaceDetection = true;
+        aspectX = DEFAULT_ASPECT;
+        aspectY = DEFAULT_ASPECT;
+        outputX = DEFAULT_OUTPUT;
+        outputY = DEFAULT_OUTPUT;
+    }
 }
