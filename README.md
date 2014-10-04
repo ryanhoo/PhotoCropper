@@ -62,6 +62,23 @@ public void onCropCancel() {
 
 ### Step 3
 
+Launch a request to crop photos.
+
+#### Crop from camera
+
+```java
+Intent intent = CropHelper.buildCaptureIntent(mCropParams.uri);
+startActivityForResult(intent, CropHelper.REQUEST_CAMERA);
+```
+
+#### Crop from gallery
+
+```java
+Intent intent = CropHelper.buildCropFromGalleryIntent(mCropParams);
+startActivityForResult(intent, CropHelper.REQUEST_CROP);
+```
+### Step 4
+
 Clear the cached image if possible.
 
 ```java
