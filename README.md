@@ -4,7 +4,9 @@ PhotoCropper is the ultimate approach to crop photos on android devices. By prov
 
 If you want to learn more details about this, my blog might help you. 
 
-[http://my.oschina.net/ryanhoo/blog/86842][2] 
+- [Android大图片裁剪终极解决方案（上：原理分析）][2]
+- [Android大图片裁剪终极解决方案（中：从相册截图）][3]
+- [Android大图片裁剪终极解决方案（下：拍照截图）][4]
 
 ## Sample
 ![photo cropper demonstration][1]
@@ -74,7 +76,7 @@ protected void onDestroy() {
 # LICENSE
 The MIT License (MIT)
 
-Copyright (c) 2014 [Ryan Hoo][3]
+Copyright (c) 2014 [Ryan Hoo][5]
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -95,5 +97,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 [1]: /images/photo-cropper-demonstration.gif
-[2]: http://my.oschina.net/ryanhoo/blog/86842
-[3]: mailto:ryan.hoo.j@gmail.com
+[2]: http://ryanhoo.github.io/blog/2014/05/26/the-ultimate-approach-to-crop-photos-on-android-1
+[3]: http://ryanhoo.github.io/blog/2014/06/03/the-ultimate-approach-to-crop-photos-on-android-2
+[4]: http://ryanhoo.github.io/blog/2014/06/03/the-ultimate-approach-to-crop-photos-on-android-3
+[5]: mailto:ryan.hoo.j@gmail.com
