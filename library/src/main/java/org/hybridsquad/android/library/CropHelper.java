@@ -23,6 +23,7 @@ import java.io.FileNotFoundException;
  * - 10:00 2014/10/03 Basic utils.
  * - 11:30 2014/10/03 Add static methods for generating crop intents.
  * - 15:00 2014/10/03 Finish the logic of handling crop intents.
+ * - 12:20 2014/10/04 Add "scaleUpIfNeeded" crop options for scaling up cropped images if the size is too small.
  */
 public class CropHelper {
 
@@ -117,6 +118,7 @@ public class CropHelper {
                 .putExtra("return-data", params.returnData)
                 .putExtra("outputFormat", params.outputFormat)
                 .putExtra("noFaceDetection", params.noFaceDetection)
+                .putExtra("scaleUpIfNeeded", params.scaleUpIfNeeded)
                 .putExtra(MediaStore.EXTRA_OUTPUT, params.uri);
     }
 
