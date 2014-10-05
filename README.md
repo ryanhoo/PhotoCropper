@@ -90,7 +90,7 @@ protected void onDestroy() {
 }
 ```
 
-# LICENSE
+## LICENSE
 The MIT License (MIT)
 
 Copyright (c) 2014 [Ryan Hoo][5]
