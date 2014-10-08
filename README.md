@@ -4,9 +4,9 @@ PhotoCropper is a light-weight but sharp and smart tool to help you crop photos 
 
 If you want to learn more details about this, my blog might help you. 
 
-- [Android大图片裁剪终极解决方案（上：原理分析）][2]
-- [Android大图片裁剪终极解决方案（中：从相册截图）][3]
-- [Android大图片裁剪终极解决方案（下：拍照截图）][4]
+- [Android 大图片裁剪终极解决方案（上：原理分析）][2]
+- [Android 大图片裁剪终极解决方案（中：从相册截图）][3]
+- [Android 大图片裁剪终极解决方案（下：拍照截图）][4]
 
 ## Sample
 ![photo cropper demonstration][1]
