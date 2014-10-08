@@ -46,6 +46,7 @@ public Activity getContext() {
 @Override
 public CropParams getCropParams() {
     // Your own crop options, simply call new CropParams() will give you a set of default crop options 
+    mCropParams = new CropParams();
     return mCropParams;
 }
 
