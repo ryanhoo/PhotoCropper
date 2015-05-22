@@ -13,6 +13,18 @@ If you want to learn more details about this, my blog might help you.
 
 ## Usage
 
+It's really easy to use, but always remember:
+
+### IMPORTANT NOTICE!!!
+
+**Always clear you cached cropped images from last time.**
+
+```java
+// MUST!! Clear Last Cached Image
+CropHelper.clearCachedCropFile(mCropParams.uri);
+startActivityForResult(CropHelper.buildCropFromGalleryIntent(mCropParams), CropHelper.REQUEST_CROP);
+```
+
 ### Step 1
 
 First you need a ``CropHandler`` to handle the activity results of cropping photos.
