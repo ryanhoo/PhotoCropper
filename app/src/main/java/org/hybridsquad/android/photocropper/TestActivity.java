@@ -45,6 +45,8 @@ public class TestActivity extends BasePhotoCropActivity implements View.OnClickL
                 startActivityForResult(intent, CropHelper.REQUEST_CAMERA);
                 break;
             case R.id.bt_gallery:
+                // MUST!! Clear Last Cached Image
+                CropHelper.clearCachedCropFile(mCropParams.uri);
                 startActivityForResult(CropHelper.buildCropFromGalleryIntent(mCropParams), CropHelper.REQUEST_CROP);
                 break;
         }

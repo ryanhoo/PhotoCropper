@@ -24,6 +24,7 @@ import java.io.FileNotFoundException;
  * - 11:30 2014/10/03 Add static methods for generating crop intents.
  * - 15:00 2014/10/03 Finish the logic of handling crop intents.
  * - 12:20 2014/10/04 Add "scaleUpIfNeeded" crop options for scaling up cropped images if the size is too small.
+ * - 16:30 2015/05/22 Fixed the error that crop from gallery doest work on some Kitkat devices.
  */
 public class CropHelper {
 
@@ -59,9 +60,23 @@ public class CropHelper {
             }
             switch (requestCode) {
                 case REQUEST_CROP:
-                    Log.d(TAG, "Photo cropped!");
-                    handler.onPhotoCropped(handler.getCropParams().uri);
-                    break;
+                    if (isPhotoReallyCropped(handler.getCropParams().uri)) {
+                        Log.d(TAG, "Photo cropped!");
+                        handler.onPhotoCropped(handler.getCropParams().uri);
+                        break;
+                    } else {
+                        Activity context = handler.getContext();
+                        if (context != null) {
+                            String path = CropFileUtils.getSmartFilePath(context, data.getData());
+                            boolean result = CropFileUtils.copyFile(path, handler.getCropParams().uri.getPath());
+                            if (!result) {
+                                handler.onCropFailed("Unknown error occurred!");
+                                break;
+                            }
+                        } else {
+                            handler.onCropFailed("CropHandler's context MUST NOT be null!");
+                        }
+                    }
                 case REQUEST_CAMERA:
                     Intent intent = buildCropFromUriIntent(handler.getCropParams());
                     Activity context = handler.getContext();
@@ -73,6 +88,12 @@ public class CropHelper {
                     break;
             }
         }
+    }
+
+    public static boolean isPhotoReallyCropped(Uri uri) {
+        File file = new File(uri.getPath());
+        long length = file.length();
+        return length > 0;
     }
 
     public static boolean clearCachedCropFile(Uri uri) {
