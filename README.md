@@ -1,5 +1,7 @@
 # PhotoCropper
 
+[ ![Download](https://api.bintray.com/packages/ryanhoo/maven/PhotoCropper/images/download.svg) ](https://bintray.com/ryanhoo/maven/PhotoCropper/_latestVersion)
+
 PhotoCropper is a light-weight but sharp and smart tool to help you cropping photos on android devices. By providing a simple callback interface for developers and encapsulating the tricky things of cropping photos into a library. It makes the logic much more easier and simpler.
 
 If you want to learn more details about this, my blogs might help you.
