@@ -1,5 +1,19 @@
 # PhotoCropper
 
+- [Sample](#sample)
+- [Usage](#usage)
+  - [IMPORTANT NOTICE!!!](#important-notice!!!)
+  - [Step 1](#step-1)
+  - [Step 2](#step-2)
+  - [Step 3](#step-3)
+    - [Crop from camera](#crop-from-camera)
+    - [Crop from gallery](#crop-from-gallery)
+  - [Step 4](#step-4)
+- [Dependency Support](#dependency-support)
+  - [Gradle](#gradle)
+  - [Maven](#maven)
+- [LICENSE](#license)
+
 [ ![Download](https://api.bintray.com/packages/ryanhoo/maven/PhotoCropper/images/download.svg) ](https://bintray.com/ryanhoo/maven/PhotoCropper/_latestVersion)
 
 PhotoCropper is a light-weight but sharp and smart tool to help you cropping photos on android devices. By providing a simple callback interface for developers and encapsulating the tricky things of cropping photos into a library. It makes the logic much more easier and simpler.
@@ -11,6 +25,7 @@ If you want to learn more details about this, my blogs might help you.
 - [Android 大图片裁剪终极解决方案（下：拍照截图）][4]
 
 ## Sample
+
 ![photo cropper demonstration][1]
 
 ## Usage
