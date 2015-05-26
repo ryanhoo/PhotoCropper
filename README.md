@@ -106,6 +106,26 @@ protected void onDestroy() {
 }
 ```
 
+## Dependency Support
+
+### Gradle
+
+```
+compile 'org.hybridsquad.android.photocropper:library:2.1.0'
+```
+
+### Maven
+
+```
+<dependency>
+        <groupId>org.hybridsquad.android.photocropper</groupId>
+        <artifactId>library</artifactId>
+        <version>2.1.0</version>
+        <type>jar</type>
+        <classifier>sources</classifier>
+</dependency>
+```
+
 ## LICENSE
 The MIT License (MIT)
 
