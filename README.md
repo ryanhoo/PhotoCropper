@@ -2,7 +2,7 @@
 
 - [Sample](#sample)
 - [Usage](#usage)
-  - [IMPORTANT NOTICE!!!](#important-notice!!!)
+  - [IMPORTANT NOTICE!](#important-notice)
   - [Step 1](#step-1)
   - [Step 2](#step-2)
   - [Step 3](#step-3)
@@ -32,7 +32,7 @@ If you want to learn more details about this, my blogs might help you.
 
 It's really easy to use, but always remember:
 
-### IMPORTANT NOTICE!!!
+### IMPORTANT NOTICE!
 
 **Always clear your cached cropped images from last time.**
 
