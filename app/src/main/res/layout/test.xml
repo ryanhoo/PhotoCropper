@@ -8,6 +8,38 @@
     android:background="@android:color/white"
     >
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:textSize="16sp"
+        android:gravity="center"
+        android:text="Crop"
+        />
+
+    <Button
+        android:id="@+id/bt_crop_capture"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Capture from Camera &amp; Crop"
+        />
+
+    <Button
+        android:id="@+id/bt_crop_gallery"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Choose from Gallery &amp; Crop"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:textSize="16sp"
+        android:gravity="center"
+        android:text="Pick/Capture"
+        />
+
     <Button
         android:id="@+id/bt_capture"
         android:layout_width="match_parent"
