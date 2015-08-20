@@ -33,6 +33,8 @@ public class TestActivity extends BasePhotoCropActivity implements View.OnClickL
 
         mImageView = (ImageView) findViewById(R.id.image);
 
+        findViewById(R.id.bt_crop_capture).setOnClickListener(this);
+        findViewById(R.id.bt_crop_gallery).setOnClickListener(this);
         findViewById(R.id.bt_capture).setOnClickListener(this);
         findViewById(R.id.bt_gallery).setOnClickListener(this);
     }
@@ -40,15 +42,32 @@ public class TestActivity extends BasePhotoCropActivity implements View.OnClickL
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.bt_capture:
+            case R.id.bt_crop_capture: {
+                mCropParams.enable = true;
                 Intent intent = CropHelper.buildCaptureIntent(mCropParams.uri);
                 startActivityForResult(intent, CropHelper.REQUEST_CAMERA);
-                break;
-            case R.id.bt_gallery:
+            }
+            break;
+            case R.id.bt_crop_gallery: {
+                mCropParams.enable = true;
                 // MUST!! Clear Last Cached Image
                 CropHelper.clearCachedCropFile(mCropParams.uri);
                 startActivityForResult(CropHelper.buildCropFromGalleryIntent(mCropParams), CropHelper.REQUEST_CROP);
-                break;
+            }
+            break;
+            case R.id.bt_capture: {
+                mCropParams.enable = false;
+                Intent intent = CropHelper.buildCaptureIntent(mCropParams.uri);
+                startActivityForResult(intent, CropHelper.REQUEST_CAMERA);
+            }
+            break;
+            case R.id.bt_gallery: {
+                mCropParams.enable = false;
+                CropHelper.clearCachedCropFile(mCropParams.uri);
+                Intent intent = CropHelper.buildPickIntent(mCropParams.uri);
+                startActivityForResult(intent, CropHelper.REQUEST_PICK);
+            }
+            break;
         }
     }
 
@@ -60,7 +79,7 @@ public class TestActivity extends BasePhotoCropActivity implements View.OnClickL
     @Override
     public void onPhotoCropped(Uri uri) {
         Log.d(TAG, "Crop Uri in path: " + uri.getPath());
-        Toast.makeText(this, "Photo cropped!", Toast.LENGTH_LONG).show();
+        // Toast.makeText(this, "Photo cropped!", Toast.LENGTH_LONG).show();
         mImageView.setImageBitmap(CropHelper.decodeUriAsBitmap(this, mCropParams.uri));
     }
 

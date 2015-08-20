@@ -15,6 +15,7 @@ import android.net.Uri;
  * - 14:00 2014/10/03 Make the crop as String instead of Boolean.
  * - 14:30 2014/10/03 Increase the default output size from 200 to 300.
  * - 12:20 2014/10/04 Add "scaleUpIfNeeded" crop options for scaling up cropped images if the size is too small.
+ * - 23:10 2015/08/20 Add enable to toggle on/off the crop function.
  */
 public class CropParams {
 
@@ -35,6 +36,12 @@ public class CropParams {
     public boolean noFaceDetection;
     public boolean scaleUpIfNeeded;
 
+    /**
+     * Default is true, if set false, crop function will not work,
+     * it will only pick up images from gallery or take pictures from camera.
+     */
+    public boolean enable;
+
     public int aspectX;
     public int aspectY;
 
@@ -50,6 +57,7 @@ public class CropParams {
         returnData = false;
         noFaceDetection = true;
         scaleUpIfNeeded = true;
+        enable = true;
         aspectX = DEFAULT_ASPECT;
         aspectY = DEFAULT_ASPECT;
         outputX = DEFAULT_OUTPUT;
