@@ -25,6 +25,7 @@ import java.io.FileNotFoundException;
  * - 15:00 2014/10/03 Finish the logic of handling crop intents.
  * - 12:20 2014/10/04 Add "scaleUpIfNeeded" crop options for scaling up cropped images if the size is too small.
  * - 16:30 2015/05/22 Fixed the error that crop from gallery doest work on some Kitkat devices.
+ * - 23:30 2015/08/20 Add support to pick or capture photo without crop.
  */
 public class CropHelper {
 
@@ -36,6 +37,7 @@ public class CropHelper {
      */
     public static final int REQUEST_CROP = 127;
     public static final int REQUEST_CAMERA = 128;
+    public static final int REQUEST_PICK = 129;
 
     public static final String CROP_CACHE_FILE_NAME = "crop_cache_file.jpg";
 
@@ -59,16 +61,17 @@ public class CropHelper {
                 return;
             }
             switch (requestCode) {
+                case REQUEST_PICK:
                 case REQUEST_CROP:
-                    if (isPhotoReallyCropped(handler.getCropParams().uri)) {
+                    if (isPhotoReallyCropped(cropParams.uri)) {
                         Log.d(TAG, "Photo cropped!");
-                        handler.onPhotoCropped(handler.getCropParams().uri);
+                        handler.onPhotoCropped(cropParams.uri);
                         break;
                     } else {
                         Activity context = handler.getContext();
                         if (context != null) {
                             String path = CropFileUtils.getSmartFilePath(context, data.getData());
-                            boolean result = CropFileUtils.copyFile(path, handler.getCropParams().uri.getPath());
+                            boolean result = CropFileUtils.copyFile(path, cropParams.uri.getPath());
                             if (!result) {
                                 handler.onCropFailed("Unknown error occurred!");
                                 break;
@@ -78,12 +81,18 @@ public class CropHelper {
                         }
                     }
                 case REQUEST_CAMERA:
-                    Intent intent = buildCropFromUriIntent(handler.getCropParams());
-                    Activity context = handler.getContext();
-                    if (context != null) {
-                        context.startActivityForResult(intent, REQUEST_CROP);
+                    if (cropParams.enable) {
+                        // Send this Uri to Crop
+                        Intent intent = buildCropFromUriIntent(cropParams);
+                        Activity context = handler.getContext();
+                        if (context != null) {
+                            context.startActivityForResult(intent, REQUEST_CROP);
+                        } else {
+                            handler.onCropFailed("CropHandler's context MUST NOT be null!");
+                        }
                     } else {
-                        handler.onCropFailed("CropHandler's context MUST NOT be null!");
+                        Log.d(TAG, "Photo cropped!");
+                        handler.onPhotoCropped(cropParams.uri);
                     }
                     break;
             }
@@ -123,7 +132,13 @@ public class CropHelper {
 
     public static Intent buildCaptureIntent(Uri uri) {
         return new Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        .putExtra(MediaStore.EXTRA_OUTPUT, uri);
+                .putExtra(MediaStore.EXTRA_OUTPUT, uri);
+    }
+
+    public static Intent buildPickIntent(Uri uri) {
+        return new Intent(Intent.ACTION_GET_CONTENT)
+                .setType("image/*")
+                .putExtra(MediaStore.EXTRA_OUTPUT, uri);
     }
 
     public static Intent buildCropIntent(String action, CropParams params) {
