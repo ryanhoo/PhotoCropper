@@ -37,7 +37,7 @@
         android:padding="10dp"
         android:textSize="16sp"
         android:gravity="center"
-        android:text="Pick/Capture"
+        android:text="None Crop"
         />
 
     <Button
@@ -54,13 +54,21 @@
         android:text="Choose from Gallery"
         />
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:textSize="16sp"
+        android:gravity="center"
+        android:text="Result"
+        />
+
     <ImageView
         android:id="@+id/image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
         android:src="@drawable/ic_launcher"
-        android:background="#eeffffff"
-        android:layout_marginTop="10dp"
+        android:background="#f7f8f9"
         />
 </LinearLayout>
