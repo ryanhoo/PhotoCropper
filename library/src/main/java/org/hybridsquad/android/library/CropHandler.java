@@ -1,6 +1,6 @@
 package org.hybridsquad.android.library;
 
-import android.app.Activity;
+import android.content.Intent;
 import android.net.Uri;
 
 /**
@@ -12,16 +12,19 @@ import android.net.Uri;
  * Revision:
  * - 10:20 2014/10/01 The basic interfaces.
  * - 13:00 2014/10/03 Able to get access to the CropParams the related Context.
+ * - 23:00 2015/09/05 Remove getContext, rename onCancel, onFailed, add handleIntent.
  */
 public interface CropHandler {
 
     void onPhotoCropped(Uri uri);
 
-    void onCropCancel();
+    void onCompressed(Uri uri);
 
-    void onCropFailed(String message);
+    void onCancel();
+
+    void onFailed(String message);
+
+    void handleIntent(Intent intent, int requestCode);
 
     CropParams getCropParams();
-
-    Activity getContext();
 }

@@ -9,10 +9,13 @@ import android.os.Build;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.util.Log;
 
 import java.io.*;
 
 public class CropFileUtils {
+
+    final static String TAG = "CropFileUtils";
 
     public static boolean copyFile(String filePath, String destPath) {
         File originFile = new File(filePath);
@@ -21,10 +24,13 @@ public class CropFileUtils {
         BufferedOutputStream writer = null;
         try {
             if (!destFile.exists()) {
-                destFile.createNewFile();
+                boolean result = destFile.createNewFile();
+                Log.d(TAG, "create new file result: " + result + " file : " + destPath);
             }
-            reader = new BufferedInputStream(new FileInputStream(originFile));
-            writer = new BufferedOutputStream(new FileOutputStream(destFile));
+            InputStream in = new FileInputStream(originFile);
+            OutputStream out = new FileOutputStream(destFile);
+            reader = new BufferedInputStream(in);
+            writer = new BufferedOutputStream(out);
             byte[] buffer = new byte[1024];
             int length;
             while ((length = reader.read(buffer)) != -1) {
@@ -36,24 +42,26 @@ public class CropFileUtils {
             if (reader != null) {
                 try {
                     reader.close();
-                } catch (IOException e) {}
+                } catch (IOException ignore) {
+                }
             }
             if (writer != null) {
                 try {
                     writer.close();
-                } catch (IOException e) {}
+                } catch (IOException ignore) {
+                }
             }
         }
         return true;
     }
 
     private static String getPathDeprecated(Context context, Uri uri) {
-        if( uri == null ) {
+        if (uri == null) {
             return null;
         }
-        String[] projection = { MediaStore.Images.Media.DATA };
+        String[] projection = {MediaStore.Images.Media.DATA};
         Cursor cursor = context.getContentResolver().query(uri, projection, null, null, null);
-        if( cursor != null ){
+        if (cursor != null) {
             int column_index = cursor
                     .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
             cursor.moveToFirst();
@@ -62,11 +70,11 @@ public class CropFileUtils {
         return uri.getPath();
     }
 
-    public static String getSmartFilePath(Context context, Uri uri){
+    public static String getSmartFilePath(Context context, Uri uri) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
             return getPathDeprecated(context, uri);
         }
-        return  CropFileUtils.getPath(context, uri);
+        return CropFileUtils.getPath(context, uri);
     }
 
     @SuppressLint("NewApi")
@@ -110,7 +118,7 @@ public class CropFileUtils {
                 }
 
                 final String selection = "_id=?";
-                final String[] selectionArgs = new String[] {
+                final String[] selectionArgs = new String[]{
                         split[1]
                 };
 
@@ -133,9 +141,9 @@ public class CropFileUtils {
      * Get the value of the data column for this Uri. This is useful for
      * MediaStore Uris, and other file-based ContentProviders.
      *
-     * @param context The context.
-     * @param uri The Uri to query.
-     * @param selection (Optional) Filter used in the query.
+     * @param context       The context.
+     * @param uri           The Uri to query.
+     * @param selection     (Optional) Filter used in the query.
      * @param selectionArgs (Optional) Selection arguments used in the query.
      * @return The value of the _data column, which is typically a file path.
      */

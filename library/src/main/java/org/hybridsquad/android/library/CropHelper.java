@@ -3,15 +3,12 @@ package org.hybridsquad.android.library;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 
 /**
  * Created with Android Studio.
@@ -26,6 +23,7 @@ import java.io.FileNotFoundException;
  * - 12:20 2014/10/04 Add "scaleUpIfNeeded" crop options for scaling up cropped images if the size is too small.
  * - 16:30 2015/05/22 Fixed the error that crop from gallery doest work on some Kitkat devices.
  * - 23:30 2015/08/20 Add support to pick or capture photo without crop.
+ * - 23:00 2015/09/05 Add compress features.
  */
 public class CropHelper {
 
@@ -39,64 +37,24 @@ public class CropHelper {
     public static final int REQUEST_CAMERA = 128;
     public static final int REQUEST_PICK = 129;
 
-    public static final String CROP_CACHE_FILE_NAME = "crop_cache_file.jpg";
+    public static final String CROP_CACHE_FOLDER = "PhotoCropper";
 
-    public static Uri buildUri() {
-        return Uri
-                .fromFile(Environment.getExternalStorageDirectory())
-                .buildUpon()
-                .appendPath(CROP_CACHE_FILE_NAME)
-                .build();
-    }
-
-    public static void handleResult(CropHandler handler, int requestCode, int resultCode, Intent data) {
-        if (handler == null) return;
-
-        if (resultCode == Activity.RESULT_CANCELED) {
-            handler.onCropCancel();
-        } else if (resultCode == Activity.RESULT_OK) {
-            CropParams cropParams = handler.getCropParams();
-            if (cropParams == null) {
-                handler.onCropFailed("CropHandler's params MUST NOT be null!");
-                return;
-            }
-            switch (requestCode) {
-                case REQUEST_PICK:
-                case REQUEST_CROP:
-                    if (isPhotoReallyCropped(cropParams.uri)) {
-                        Log.d(TAG, "Photo cropped!");
-                        handler.onPhotoCropped(cropParams.uri);
-                        break;
-                    } else {
-                        Activity context = handler.getContext();
-                        if (context != null) {
-                            String path = CropFileUtils.getSmartFilePath(context, data.getData());
-                            boolean result = CropFileUtils.copyFile(path, cropParams.uri.getPath());
-                            if (!result) {
-                                handler.onCropFailed("Unknown error occurred!");
-                                break;
-                            }
-                        } else {
-                            handler.onCropFailed("CropHandler's context MUST NOT be null!");
-                        }
-                    }
-                case REQUEST_CAMERA:
-                    if (cropParams.enable) {
-                        // Send this Uri to Crop
-                        Intent intent = buildCropFromUriIntent(cropParams);
-                        Activity context = handler.getContext();
-                        if (context != null) {
-                            context.startActivityForResult(intent, REQUEST_CROP);
-                        } else {
-                            handler.onCropFailed("CropHandler's context MUST NOT be null!");
-                        }
-                    } else {
-                        Log.d(TAG, "Photo cropped!");
-                        handler.onPhotoCropped(cropParams.uri);
-                    }
-                    break;
+    public static Uri generateUri() {
+        File cacheFolder = new File(Environment.getExternalStorageDirectory() + File.separator + CROP_CACHE_FOLDER);
+        if (!cacheFolder.exists()) {
+            try {
+                boolean result = cacheFolder.mkdir();
+                Log.d(TAG, "generateUri " + cacheFolder + " result: " + (result ? "succeeded" : "failed"));
+            } catch (Exception e) {
+                Log.e(TAG, "generateUri failed: " + cacheFolder, e);
             }
         }
+        String name = String.format("image-%d.jpg", System.currentTimeMillis());
+        return Uri
+                .fromFile(cacheFolder)
+                .buildUpon()
+                .appendPath(name)
+                .build();
     }
 
     public static boolean isPhotoReallyCropped(Uri uri) {
@@ -105,47 +63,96 @@ public class CropHelper {
         return length > 0;
     }
 
-    public static boolean clearCachedCropFile(Uri uri) {
-        if (uri == null) return false;
+    public static void handleResult(CropHandler handler, int requestCode, int resultCode, Intent data) {
+        if (handler == null) return;
 
-        File file = new File(uri.getPath());
-        if (file.exists()) {
-            boolean result = file.delete();
-            if (result)
-                Log.i(TAG, "Cached crop file cleared.");
-            else
-                Log.e(TAG, "Failed to clear cached crop file.");
-            return result;
-        } else {
-            Log.w(TAG, "Trying to clear cached crop file but it does not exist.");
+        if (resultCode == Activity.RESULT_CANCELED) {
+            handler.onCancel();
+        } else if (resultCode == Activity.RESULT_OK) {
+            CropParams cropParams = handler.getCropParams();
+            if (cropParams == null) {
+                handler.onFailed("CropHandler's params MUST NOT be null!");
+                return;
+            }
+            switch (requestCode) {
+                case REQUEST_PICK:
+                case REQUEST_CROP:
+                    if (isPhotoReallyCropped(cropParams.uri)) {
+                        Log.d(TAG, "Photo cropped!");
+                        onPhotoCropped(handler, cropParams);
+                        break;
+                    } else {
+                        Context context = handler.getCropParams().context;
+                        if (context != null) {
+                            if (data != null && data.getData() != null) {
+                                String path = CropFileUtils.getSmartFilePath(context, data.getData());
+                                boolean result = CropFileUtils.copyFile(path, cropParams.uri.getPath());
+                                if (!result) {
+                                    handler.onFailed("Copy file to cached folder failed");
+                                    break;
+                                }
+                            } else {
+                                handler.onFailed("Returned data is null " + data);
+                                break;
+                            }
+                        } else {
+                            handler.onFailed("CropHandler's context MUST NOT be null!");
+                        }
+                    }
+                case REQUEST_CAMERA:
+                    if (cropParams.enable) {
+                        // Send this Uri to Crop
+                        Intent intent = buildCropFromUriIntent(cropParams);
+                        handler.handleIntent(intent, REQUEST_CROP);
+                    } else {
+                        Log.d(TAG, "Photo cropped!");
+                        onPhotoCropped(handler, cropParams);
+                    }
+                    break;
+            }
         }
-        return false;
     }
 
-    public static Intent buildCropFromUriIntent(CropParams params) {
+    private static void onPhotoCropped(CropHandler handler, CropParams cropParams) {
+        if (cropParams.compress) {
+            Uri originUri = cropParams.uri;
+            Uri compressUri = CropHelper.generateUri();
+            CompressImageUtils.compressImageFile(cropParams, originUri, compressUri);
+            handler.onCompressed(compressUri);
+        } else {
+            handler.onPhotoCropped(cropParams.uri);
+        }
+    }
+
+    // None-Crop Intents
+
+    public static Intent buildGalleryIntent(CropParams params) {
+        Intent intent;
+        if (params.enable) {
+            intent = buildCropIntent(Intent.ACTION_GET_CONTENT, params);
+        } else {
+            intent = new Intent(Intent.ACTION_GET_CONTENT)
+                    .setType("image/*")
+                    .putExtra(MediaStore.EXTRA_OUTPUT, params.uri);
+        }
+        return intent;
+    }
+
+    public static Intent buildCameraIntent(CropParams params) {
+        return new Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                .putExtra(MediaStore.EXTRA_OUTPUT, params.uri);
+    }
+
+    // Crop Intents
+
+    private static Intent buildCropFromUriIntent(CropParams params) {
         return buildCropIntent("com.android.camera.action.CROP", params);
     }
 
-    public static Intent buildCropFromGalleryIntent(CropParams params) {
-        return buildCropIntent(Intent.ACTION_GET_CONTENT, params);
-    }
-
-    public static Intent buildCaptureIntent(Uri uri) {
-        return new Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-                .putExtra(MediaStore.EXTRA_OUTPUT, uri);
-    }
-
-    public static Intent buildPickIntent(Uri uri) {
-        return new Intent(Intent.ACTION_GET_CONTENT)
-                .setType("image/*")
-                .putExtra(MediaStore.EXTRA_OUTPUT, uri);
-    }
-
-    public static Intent buildCropIntent(String action, CropParams params) {
-        return new Intent(action, null)
+    private static Intent buildCropIntent(String action, CropParams params) {
+        return new Intent(action)
                 .setDataAndType(params.uri, params.type)
-                        //.setType(params.type)
-                .putExtra("crop", params.crop)
+                .putExtra("crop", "true")
                 .putExtra("scale", params.scale)
                 .putExtra("aspectX", params.aspectX)
                 .putExtra("aspectY", params.aspectY)
@@ -158,16 +165,29 @@ public class CropHelper {
                 .putExtra(MediaStore.EXTRA_OUTPUT, params.uri);
     }
 
-    public static Bitmap decodeUriAsBitmap(Context context, Uri uri) {
-        if (context == null || uri == null) return null;
+    // Clear Cache
 
-        Bitmap bitmap;
-        try {
-            bitmap = BitmapFactory.decodeStream(context.getContentResolver().openInputStream(uri));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            return null;
+    public static boolean clearCacheDir() {
+        File cacheFolder = new File(Environment.getExternalStorageDirectory() + File.separator + CROP_CACHE_FOLDER);
+        if (cacheFolder.exists()) {
+            for (File file : cacheFolder.listFiles()) {
+                boolean result = file.delete();
+                Log.d(TAG, "Delete " + file.getAbsolutePath() + (result ? " succeeded" : " failed"));
+            }
+            return true;
         }
-        return bitmap;
+        return false;
+    }
+
+    public static boolean clearCachedCropFile(Uri uri) {
+        if (uri == null) return false;
+
+        File file = new File(uri.getPath());
+        if (file.exists()) {
+            boolean result = file.delete();
+            Log.d(TAG, "Delete " + file.getAbsolutePath() + (result ? " succeeded" : " failed"));
+            return result;
+        }
+        return false;
     }
 }
