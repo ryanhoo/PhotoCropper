@@ -3,7 +3,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
 
-version = "2.2.0"
+version = "3.0.0"
 android {
     compileSdkVersion 20
     buildToolsVersion "20.0.0"
@@ -12,7 +12,7 @@ android {
     defaultConfig {
         minSdkVersion 8
         targetSdkVersion 20
-        versionCode 13
+        versionCode 15
         versionName version
     }
     buildTypes {
@@ -29,15 +29,17 @@ dependencies {
 
 def siteUrl = 'https://github.com/ryanhoo/PhotoCropper'
 def gitUrl = 'https://github.com/ryanhoo/PhotoCropper.git'
+def intro = 'The Ultimate Approach to crop photos on android devices, especially for large size photos. This way can help you avoid OOM(OutOfMemory) exception.'
 group = "org.hybridsquad.android.photocropper"
 install {
     repositories.mavenInstaller {
         // This generates POM.xml with proper parameters
         pom {
+            //noinspection GroovyAssignabilityCheck
             project {
                 packaging 'aar'
                 // Add your description here
-                name 'The Ultimate Approach to crop photos on android devices, especially for large size photos. This way can help you avoid OOM(OutOfMemory) exception.'
+                name intro
                 url siteUrl
                 // Set your license
                 licenses {
