@@ -161,8 +161,7 @@ public class CropHelper {
                 .putExtra("return-data", params.returnData)
                 .putExtra("outputFormat", params.outputFormat)
                 .putExtra("noFaceDetection", params.noFaceDetection)
-                .putExtra("scaleUpIfNeeded", params.scaleUpIfNeeded)
-                .putExtra(MediaStore.EXTRA_OUTPUT, params.uri);
+                .putExtra("scaleUpIfNeeded", params.scaleUpIfNeeded);
     }
 
     // Clear Cache
