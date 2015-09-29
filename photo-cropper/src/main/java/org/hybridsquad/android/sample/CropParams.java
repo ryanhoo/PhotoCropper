@@ -90,6 +90,12 @@ public class CropParams {
         refreshUri();
     }
 
+    public CropParams(Context context, boolean cropEnabled, boolean compressEnabled) {
+        this(context);
+        enable = cropEnabled;
+        compress = compressEnabled;
+    }
+
     public void refreshUri() {
         uri = CropHelper.generateUri();
     }
