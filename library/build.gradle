@@ -3,16 +3,16 @@ apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
 
-version = "3.0.1"
+version = "3.0.2"
 android {
-    compileSdkVersion 20
-    buildToolsVersion "20.0.0"
+    compileSdkVersion 23
+    buildToolsVersion "23.0.1"
     resourcePrefix "hybridsquad_"
 
     defaultConfig {
         minSdkVersion 8
-        targetSdkVersion 20
-        versionCode 16
+        targetSdkVersion 23
+        versionCode 20
         versionName version
     }
     buildTypes {
