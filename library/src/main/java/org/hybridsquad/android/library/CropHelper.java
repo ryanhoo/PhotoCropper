@@ -169,7 +169,7 @@ public class CropHelper {
 
     public static boolean clearCacheDir() {
         File cacheFolder = new File(Environment.getExternalStorageDirectory() + File.separator + CROP_CACHE_FOLDER);
-        if (cacheFolder.exists()) {
+        if (cacheFolder.exists() && cacheFolder.listFiles() != null) {
             for (File file : cacheFolder.listFiles()) {
                 boolean result = file.delete();
                 Log.d(TAG, "Delete " + file.getAbsolutePath() + (result ? " succeeded" : " failed"));
