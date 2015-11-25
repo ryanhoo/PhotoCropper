@@ -1,1 +1,1 @@
-include ':app', ':library'
+include ':photo-cropper-sample', ':photo-cropper'
