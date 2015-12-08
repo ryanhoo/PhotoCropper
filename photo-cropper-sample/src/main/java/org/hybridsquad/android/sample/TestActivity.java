@@ -8,6 +8,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
+import org.hybridsquad.android.BitmapUtil;
+import org.hybridsquad.android.CropHandler;
+import org.hybridsquad.android.CropHelper;
+import org.hybridsquad.android.CropParams;
 
 /**
  * Created with Android Studio.
