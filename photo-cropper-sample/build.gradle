@@ -1,16 +1,17 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 22
-    buildToolsVersion "22.0.1"
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
-        applicationId "org.hybridsquad.android.photocropper"
-        minSdkVersion 8
-        targetSdkVersion 20
-        versionCode 3
-        versionName "1.0.2"
+        applicationId APPLICATION_ID
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode rootProject.ext.versionCode
+        versionName rootProject.ext.versionName
     }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -22,5 +23,5 @@ android {
 dependencies {
     compile project(':photo-cropper')
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:22.2.1'
+    compile deps.appcompat_v7
 }

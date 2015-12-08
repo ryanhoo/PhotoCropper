@@ -1,1 +1,3 @@
 include ':photo-cropper-sample', ':photo-cropper'
+
+rootProject.name = 'Photo Cropper'

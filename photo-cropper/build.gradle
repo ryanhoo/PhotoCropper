@@ -3,16 +3,17 @@ apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
 
-version = "3.0.2"
+version = rootProject.ext.versionName
+
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.1"
-    resourcePrefix "hybridsquad_"
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
+    resourcePrefix RESOURCE_PREFIX
 
     defaultConfig {
-        minSdkVersion 8
-        targetSdkVersion 23
-        versionCode 20
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode rootProject.ext.versionCode
         versionName version
     }
     buildTypes {
@@ -27,10 +28,12 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 }
 
-def siteUrl = 'https://github.com/ryanhoo/PhotoCropper'
-def gitUrl = 'https://github.com/ryanhoo/PhotoCropper.git'
-def intro = 'The Ultimate Approach to crop photos on android devices, especially for large size photos. This way can help you avoid OOM(OutOfMemory) exception.'
-group = "org.hybridsquad.android.photocropper"
+def siteUrl = SITE_URL
+def gitUrl = GIT_URL
+def intro = INTRO
+
+group = APPLICATION_ID
+
 install {
     repositories.mavenInstaller {
         // This generates POM.xml with proper parameters
@@ -44,15 +47,15 @@ install {
                 // Set your license
                 licenses {
                     license {
-                        name 'MIT'
-                        url 'http://opensource.org/licenses/MIT'
+                        name LICENSE_NAME
+                        url LICENSE_URL
                     }
                 }
                 developers {
                     developer {
-                        id 'ryanhoo'
-                        name 'Ryan Hoo'
-                        email 'ryan.hoo.j@gmail.com'
+                        id DEVELOPER_ID
+                        name DEVELOPER_NAME
+                        email DEVELOPER_EMAIL
                     }
                 }
                 scm {
@@ -87,11 +90,11 @@ bintray {
     key = properties.getProperty("bintray.apikey")
     configurations = ['archives']
     pkg {
-        repo = "maven"
-        name = "PhotoCropper"
+        repo = PKG_REPO
+        name = PKG_NAME
         websiteUrl = siteUrl
         vcsUrl = gitUrl
-        licenses = ["MIT"]
+        licenses = [LICENSE_NAME]
         publish = true
     }
 }

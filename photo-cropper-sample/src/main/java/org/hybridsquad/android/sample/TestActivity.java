@@ -1,4 +1,4 @@
-package org.hybridsquad.android.photocropper;
+package org.hybridsquad.android.sample;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -8,10 +8,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
-import org.hybridsquad.android.library.BitmapUtil;
-import org.hybridsquad.android.library.CropHandler;
-import org.hybridsquad.android.library.CropHelper;
-import org.hybridsquad.android.library.CropParams;
 
 /**
  * Created with Android Studio.

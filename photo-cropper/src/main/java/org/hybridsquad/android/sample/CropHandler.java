@@ -1,4 +1,4 @@
-package org.hybridsquad.android.library;
+package org.hybridsquad.android.sample;
 
 import android.content.Intent;
 import android.net.Uri;

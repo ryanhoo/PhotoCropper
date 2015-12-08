@@ -1,4 +1,4 @@
-package org.hybridsquad.android.library;
+package org.hybridsquad.android.sample;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
