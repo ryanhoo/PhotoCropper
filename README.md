@@ -1,3 +1,5 @@
+**This repository is deprecated and will be maintained no more.**
+
 # PhotoCropper
 
 - [Sample](#sample)
