@@ -127,14 +127,18 @@ public class CropHelper {
     // None-Crop Intents
 
     public static Intent buildGalleryIntent(CropParams params) {
-        Intent intent;
-        if (params.enable) {
+         Intent intent;
+        /*if (params.enable) {
             intent = buildCropIntent(Intent.ACTION_GET_CONTENT, params);
         } else {
             intent = new Intent(Intent.ACTION_GET_CONTENT)
-                    .setType("image/*")
+                    .setType("image*//*")
                     .putExtra(MediaStore.EXTRA_OUTPUT, params.uri);
-        }
+        }*/
+
+        intent = new Intent(Intent.ACTION_GET_CONTENT)
+                .setType("image/*")
+                .putExtra(MediaStore.EXTRA_OUTPUT, params.uri);
         return intent;
     }
 
@@ -161,8 +165,7 @@ public class CropHelper {
                 .putExtra("return-data", params.returnData)
                 .putExtra("outputFormat", params.outputFormat)
                 .putExtra("noFaceDetection", params.noFaceDetection)
-                .putExtra("scaleUpIfNeeded", params.scaleUpIfNeeded)
-                .putExtra(MediaStore.EXTRA_OUTPUT, params.uri);
+                .putExtra("scaleUpIfNeeded", params.scaleUpIfNeeded);
     }
 
     // Clear Cache
